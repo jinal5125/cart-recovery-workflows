@@ -1,0 +1,169 @@
+{
+  "name": "1_cart_issue_workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "f81bec88-c3cf-4673-8bfa-37a21f4dc69f",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -352,
+        -48
+      ],
+      "id": "b9c75328-b64c-408c-a48b-750208fec807",
+      "name": "Webhook",
+      "webhookId": "f81bec88-c3cf-4673-8bfa-37a21f4dc69f"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1DVs0Xmez9-nvce1dkkttgDwrLZPh6lBarCqSg4F3eQ0",
+          "mode": "list",
+          "cachedResultName": "Abandoned cart_records",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DVs0Xmez9-nvce1dkkttgDwrLZPh6lBarCqSg4F3eQ0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Abandoned cart_records",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DVs0Xmez9-nvce1dkkttgDwrLZPh6lBarCqSg4F3eQ0/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "customerName": "={{ $json.body.name }}",
+            "email": "={{ $json.body.email }}",
+            "phone": "={{ $json.body.cno }}",
+            "product": "={{ $json.body.product }}",
+            "status": "cart",
+            "cartTime": "={{ $now }}",
+            "reminderSent": "no"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "customerName",
+              "displayName": "customerName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "product",
+              "displayName": "product",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "cartTime",
+              "displayName": "cartTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reminderSent",
+              "displayName": "reminderSent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -128,
+        -48
+      ],
+      "id": "dfd815a7-dece-42b6-8f23-169d8052e191",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Ytk0QlVNB6bioyO1",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "fdd44c26-bf23-467f-8454-3d43d605f2c1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "62139197bccfb4f6910e6b31ddb1b34a79c71511b316665a51127bb335207c18"
+  },
+  "nodeGroups": [],
+  "id": "Mi1BcsxdTQ1gBKxI",
+  "tags": []
+}

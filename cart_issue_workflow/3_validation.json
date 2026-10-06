@@ -1,0 +1,175 @@
+{
+  "name": "3_validation",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -496,
+        -48
+      ],
+      "id": "7bb57573-3b22-4e3f-8d9f-a57b3ea2556d",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1DVs0Xmez9-nvce1dkkttgDwrLZPh6lBarCqSg4F3eQ0",
+          "mode": "list",
+          "cachedResultName": "Abandoned cart_records",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DVs0Xmez9-nvce1dkkttgDwrLZPh6lBarCqSg4F3eQ0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Abandoned cart_records",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1DVs0Xmez9-nvce1dkkttgDwrLZPh6lBarCqSg4F3eQ0/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "status",
+              "lookupValue": "cart"
+            },
+            {
+              "lookupColumn": "reminderSent",
+              "lookupValue": "no"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -272,
+        -48
+      ],
+      "id": "63035613-1782-4fe4-b18b-5703555690d7",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Ytk0QlVNB6bioyO1",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "03b8f162-6db3-44ae-811d-f548877b8131",
+              "leftValue": "={{ $now }}",
+              "rightValue": "={{ DateTime.fromISO($json.cartTime).plus({ minutes: 30 }) }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "after"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -48,
+        -48
+      ],
+      "id": "4c988b51-39e9-43b4-a034-a63bbfc65ade",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Get row(s) in sheet').item.json.email }}",
+        "subject": "waiting your cart item!",
+        "message": "=<div style=\"margin:0; padding:0; background-color:#f4f6f8; font-family:Arial,Helvetica,sans-serif;\">\n\n  <div style=\"max-width:600px; margin:30px auto; background:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.08);\">\n\n    <!-- Header -->\n    <div style=\"background:#111827; padding:25px 30px; text-align:center;\">\n      <h1 style=\"margin:0; color:#ffffff; font-size:26px;\">\n        Your Cart is Waiting 🛒\n      </h1>\n      <p style=\"margin:8px 0 0; color:#d1d5db; font-size:14px;\">\n        Don't miss out on your selected items\n      </p>\n    </div>\n\n    <!-- Content -->\n    <div style=\"padding:30px;\">\n\n      <p style=\"margin:0 0 15px; color:#333333; font-size:16px;\">\n        Hi <strong>{{ $('Get row(s) in sheet').item.json.customerName }}</strong>,\n      </p>\n\n      <p style=\"margin:0 0 25px; color:#666666; font-size:15px; line-height:1.6;\">\n        You left an item in your shopping cart. It's still waiting for you!\n      </p>\n\n      <!-- Product Card -->\n      <div style=\"background:#f9fafb; border:1px solid #e5e7eb; border-radius:10px; padding:20px; margin-bottom:25px;\">\n\n        <p style=\"margin:0 0 10px; color:#6b7280; font-size:13px;\">\n          PRODUCT\n        </p>\n\n        <h2 style=\"margin:0; color:#111827; font-size:20px;\">\n          {{ $('Get row(s) in sheet').item.json.product }}\n        </h2>\n\n        <p style=\"margin:10px 0 0; color:#6b7280; font-size:14px;\">\n          Your item is still in your cart.\n        </p>\n\n      </div>\n\n      <!-- Button -->\n      <div style=\"text-align:center; margin:30px 0;\">\n\n        <a href=\"http://localhost:3000/\"\n           style=\"display:inline-block; padding:14px 30px; background:#111827; color:#ffffff; text-decoration:none; border-radius:8px; font-size:15px; font-weight:bold;\">\n          Continue Shopping →\n        </a>\n\n      </div>\n\n      <p style=\"margin:0; color:#777777; font-size:13px; line-height:1.5; text-align:center;\">\n        We saved your cart for you. Come back and complete your purchase whenever you're ready.\n      </p>\n\n    </div>\n\n    <!-- Footer -->\n    <div style=\"background:#f9fafb; border-top:1px solid #eeeeee; padding:20px; text-align:center;\">\n\n      <p style=\"margin:0; color:#999999; font-size:12px;\">\n        This is an automated reminder from your shopping cart.\n      </p>\n\n      <p style=\"margin:8px 0 0; color:#999999; font-size:12px;\">\n        © 2026 Your Store. All rights reserved.\n      </p>\n\n    </div>\n\n  </div>\n\n</div>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        176,
+        -144
+      ],
+      "id": "f2ce82bd-9771-4db0-9989-3c5926ce546c",
+      "name": "Send a message",
+      "webhookId": "2f5df608-e231-4843-8d5f-20f73705fe1e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dJpyl9XL157UxMbc",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "084a1a80-f73d-40f5-8e7e-857f28d82e1b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "62139197bccfb4f6910e6b31ddb1b34a79c71511b316665a51127bb335207c18"
+  },
+  "nodeGroups": [],
+  "id": "o4lk3WdB4iM7c4dC",
+  "tags": []
+}
